@@ -28,6 +28,7 @@ Follow the link to access the swagger api documentation and api-docs:
 
 ### Information
 
+* Java version 17
 * Database: PostgreSQL (image Docker)
 * JWT Token
 * Validation Authorize
