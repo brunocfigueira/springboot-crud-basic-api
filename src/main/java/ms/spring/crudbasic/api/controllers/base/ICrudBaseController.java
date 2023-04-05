@@ -1,7 +1,7 @@
 package ms.spring.crudbasic.api.controllers.base;
 
 import jakarta.validation.Valid;
-import ms.spring.crudbasic.api.infra.configurations.swagger.ApiPageable;
+import ms.spring.crudbasic.api.infrastructure.configurations.swagger.ApiPageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

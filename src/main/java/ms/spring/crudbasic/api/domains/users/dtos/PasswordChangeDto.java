@@ -3,7 +3,7 @@ package ms.spring.crudbasic.api.domains.users.dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import ms.spring.crudbasic.api.infra.validations.ConfirmedEqualsFields;
+import ms.spring.crudbasic.api.infrastructure.validations.ConfirmedEqualsFields;
 
 /**
  * Password rule explained

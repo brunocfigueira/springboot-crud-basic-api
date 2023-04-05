@@ -23,12 +23,21 @@ Follow the link to access the swagger api documentation and api-docs:
 
 * [Swagger API](http://localhost:8080/swagger-ui/index.html)
 
-### Deploy em produção
+### Information
+* Database: PostgreSQL (image Docker)
+* JWT Token
+* Validation Authorize
+* Root User configuration (not can delete)
+* Migration with flyway
+  * Tables (Users, Profiles, Permissions, Profile Permission)
+  * Seed early records
 
-* Gerar .jar da aplicação: 
+### Deploy in producion
+
+* Generate .jar of the application:
   Maven -> Lifecycle -> Package
-  - Dir: target/{nome_app}.jar
-* Copiar arquivo .jar para dentro do servidor Produção.
-  - O servidor de produção deve estar com java instalado na mesma versão da aplicação.
-* Rode o seguinte comando em produção: 
-  java -Dspring.profiles.active=prod -DDATA_SOURCE_URL=jdbc:postgresql://{hots}:5432/  -DDATA_SOURCE_USERNAME={username}  -DDATA_SOURCE_PASSWORD={password} -jar {path}/{nome_app}.jar
+  - Dir: target/{app_name}.jar
+* Copy the .jar file into the Production server.
+  - The production server must have java installed in the same version of the application.
+* Run the following command in production:
+  java -Dspring.profiles.active=prod -DDATA_SOURCE_URL=jdbc:postgresql://{hots}:5432/ -DDATA_SOURCE_USERNAME={username} -DDATA_SOURCE_PASSWORD={password} -jar {path}/{name_app}.jar

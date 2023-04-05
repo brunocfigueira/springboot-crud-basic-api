@@ -2,12 +2,12 @@ package ms.spring.crudbasic.api.domains.profiles;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ms.spring.crudbasic.api.domains.profiles.dtos.NewProfileDto;
+import ms.spring.crudbasic.api.domains.profiles.dtos.CreateProfileDto;
 
 import java.util.Date;
 
 @Table(name = "profiles")
-@Entity(name = "Profile")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,19 +19,20 @@ public class ProfileEntity {
     private Long id;
     private String name;
     private String description;
+    private String acronym;
     private Boolean active;
     private Date createdAt;
     private Date updatedAt;
 
-    public ProfileEntity(NewProfileDto dto) {
+    public ProfileEntity(CreateProfileDto dto) {
         active = true;
         createdAt = new Date();
         name = dto.name();
         description = dto.description();
-
+        acronym = dto.acronym().toUpperCase();
     }
 
-    public static ProfileEntity createNewProfile(NewProfileDto dto) {
+    public static ProfileEntity createNewProfile(CreateProfileDto dto) {
         return new ProfileEntity(dto);
     }
 }
