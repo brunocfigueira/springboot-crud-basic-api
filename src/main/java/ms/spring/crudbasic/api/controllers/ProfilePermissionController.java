@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @SecurityRequirement(name = "bearer-key") // this parameter is equals defined in OpenApiConfiguration
@@ -33,7 +32,7 @@ public class ProfilePermissionController implements ICrudBaseController<CreatePr
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid CreateProfilePermissionsDto request, UriComponentsBuilder uriBuilder) {
         var reference = service.create(request);
-        var uri = uriBuilder.path("profile-permission/{id}").buildAndExpand(reference.getId()).toUri();
+        var uri = uriBuilder.path("profile-permission/{profileId}").buildAndExpand(reference.getProfileId()).toUri();
         return ResponseEntity.created(uri).body(ResponseSuccess.createdSuccess());
     }
 
@@ -42,7 +41,7 @@ public class ProfilePermissionController implements ICrudBaseController<CreatePr
     @PutMapping("/{profileId}")
     public ResponseEntity update(@PathVariable Long profileId, @RequestBody @Valid UpdateProfilePermissionsDto request) {
         service.update(profileId, request);
-        return ResponseEntity.ok(ResponseSuccess.updateSuccess());
+        return ResponseEntity.ok(ResponseSuccess.updatedSuccess());
     }
 
     @Override
@@ -50,8 +49,8 @@ public class ProfilePermissionController implements ICrudBaseController<CreatePr
     @ApiPageable
     @GetMapping("/search")
     public ResponseEntity<Page<DetailsProfilePermissionsDto>> search(@PageableDefault(size = 10) Pageable request) {
-        var responsePage = service.search(request);
-        return ResponseEntity.ok(responsePage);
+        var response = service.search(request);
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -69,6 +68,6 @@ public class ProfilePermissionController implements ICrudBaseController<CreatePr
     @Operation(summary = "Remove profile permission", description = "Execute operation of remove profile permission")
     @DeleteMapping("/{profileId}")
     public ResponseEntity remove(@PathVariable Long profileId) {
-        return service.remove(profileId) ? ResponseEntity.ok(ResponseSuccess.removeSuccess()) : ResponseEntity.notFound().build();
+        return service.remove(profileId) ? ResponseEntity.ok(ResponseSuccess.removedSuccess()) : ResponseEntity.notFound().build();
     }
 }

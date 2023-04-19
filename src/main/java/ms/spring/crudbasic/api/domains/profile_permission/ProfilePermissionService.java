@@ -2,6 +2,7 @@ package ms.spring.crudbasic.api.domains.profile_permission;
 
 import ms.spring.crudbasic.api.domains.permissions.PermissionService;
 import ms.spring.crudbasic.api.domains.profile_permission.dtos.CreateProfilePermissionsDto;
+import ms.spring.crudbasic.api.domains.profile_permission.dtos.DetailsProfilePermissionsDto;
 import ms.spring.crudbasic.api.domains.profile_permission.dtos.UpdateProfilePermissionsDto;
 import ms.spring.crudbasic.api.domains.profiles.ProfileService;
 import ms.spring.crudbasic.api.infrastructure.exceptions.RuleViolationException;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,10 +27,14 @@ public class ProfilePermissionService extends CrudService<IProfilePermissionRepo
         super(repository);
     }
 
-    private void applyRuleValidation(Long profileId, List<Long> permissionIds) {
+    private void applyRuleValidationProfile(Long profileId) {
         if (isRooProfile(profileId) || !profileService.isProfileActive(profileId)) {
             throw RuleViolationException.emitMessage(ResponseErrors.violationProfileIdPermission);
         }
+    }
+
+    private void applyRuleValidation(Long profileId, List<Long> permissionIds) {
+        applyRuleValidationProfile(profileId);
 
         permissionIds.forEach(permissionId -> {
 
@@ -56,19 +62,20 @@ public class ProfilePermissionService extends CrudService<IProfilePermissionRepo
     }
 
     private void applyRuleValidationDelete(Long profileId) {
-        checkRootProfileId(profileId);
+        applyRuleValidationProfile(profileId);
         checkRootPermissionByProfileId(profileId);
     }
 
     private void saveProfilePermissions(Long profileId, List<Long> permissionIds) {
+        var references = new ArrayList<ProfilePermissionEntity>();
         permissionIds.forEach(permissionId -> {
-            var reference = ProfilePermissionEntity.createNewProfilePermission(profileId, permissionId);
-            save(reference);
+            references.add(ProfilePermissionEntity.createNewProfilePermission(profileId, permissionId));
         });
+        repository.saveAll(references);
     }
 
     private void deletePermissionByProfileId(Long profileId) {
-        repository.deleteByProfileId(profileId);
+        repository.deleteAllByProfileId(profileId);
     }
 
     @Override
@@ -97,8 +104,8 @@ public class ProfilePermissionService extends CrudService<IProfilePermissionRepo
     }
 
     @Override
-    public Page search(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<DetailsProfilePermissionsDto> search(Pageable pageable) {
+        return repository.findAll(pageable).map(entity -> new DetailsProfilePermissionsDto(entity));
     }
 
     @Override

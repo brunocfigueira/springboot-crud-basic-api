@@ -1,6 +1,7 @@
 package ms.spring.crudbasic.api.domains.permissions;
 
 import ms.spring.crudbasic.api.domains.permissions.dtos.CreatePermissionDto;
+import ms.spring.crudbasic.api.domains.permissions.dtos.DetailsPermissionDto;
 import ms.spring.crudbasic.api.domains.permissions.dtos.UpdatePermissionDto;
 import ms.spring.crudbasic.api.infrastructure.services.CrudService;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class PermissionService extends CrudService<IPermissionRepository, Permis
 
     @Override
     public PermissionEntity update(Long id, UpdatePermissionDto dto) {
+        checkRootPermissionId(id);
         var reference = getReference(id);
         reference.setUpdatedAt(new Date());
         reference.setName(dto.name().toUpperCase());
@@ -45,8 +47,8 @@ public class PermissionService extends CrudService<IPermissionRepository, Permis
     }
 
     @Override
-    public Page search(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<DetailsPermissionDto> search(Pageable pageable) {
+        return repository.findAll(pageable).map(entity -> new DetailsPermissionDto(entity));
     }
 
     @Override

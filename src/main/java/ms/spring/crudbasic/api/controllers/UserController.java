@@ -46,26 +46,26 @@ public class UserController implements ICrudBaseController<CreateUserDto, Update
     @Override
     public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid UpdateUserDto request) {
         service.update(id, request);
-        return ResponseEntity.ok(ResponseSuccess.updateSuccess());
+        return ResponseEntity.ok(ResponseSuccess.updatedSuccess());
     }
 
     @Operation(summary = "Change Password user", description = "Execute operation of change password user")
     @PatchMapping("/ChangePassword/{id}")
     public ResponseEntity changePassword(@PathVariable Long id, @RequestBody @Valid PasswordChangeDto request) {
         service.changePassword(id, request);
-        return ResponseEntity.ok(ResponseSuccess.updateSuccess());
+        return ResponseEntity.ok(ResponseSuccess.updatedSuccess());
     }
 
     @Operation(summary = "Search user", description = "Execute operation of search user")
     @Override
     public ResponseEntity<Page<DetailsUserDto>> search(@PageableDefault(size = 10) Pageable request) {
-        var responsePage = service.search(request);
-        return ResponseEntity.ok(responsePage);
+        var response = service.search(request);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Remove user", description = "Execute operation of remove user")
     @Override
     public ResponseEntity remove(@PathVariable Long id) {
-        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removeSuccess()) : ResponseEntity.notFound().build();
+        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removedSuccess()) : ResponseEntity.notFound().build();
     }
 }

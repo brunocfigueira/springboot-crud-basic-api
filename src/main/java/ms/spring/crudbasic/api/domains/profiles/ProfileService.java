@@ -1,6 +1,7 @@
 package ms.spring.crudbasic.api.domains.profiles;
 
 import ms.spring.crudbasic.api.domains.profiles.dtos.CreateProfileDto;
+import ms.spring.crudbasic.api.domains.profiles.dtos.DetailsProfileDto;
 import ms.spring.crudbasic.api.domains.profiles.dtos.UpdateProfileDto;
 import ms.spring.crudbasic.api.infrastructure.services.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class ProfileService extends CrudService<IProfileRepository, ProfileEntit
 
     @Override
     public ProfileEntity update(Long id, UpdateProfileDto dto) {
+        checkRootProfileId(id);
         var reference = getReference(id);
         reference.setUpdatedAt(new Date());
         reference.setName(dto.name());
@@ -52,8 +54,8 @@ public class ProfileService extends CrudService<IProfileRepository, ProfileEntit
     }
 
     @Override
-    public Page search(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<DetailsProfileDto> search(Pageable pageable) {
+        return repository.findAll(pageable).map(entity -> new DetailsProfileDto(entity));
     }
 
     @Override

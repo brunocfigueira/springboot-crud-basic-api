@@ -2,6 +2,7 @@ package ms.spring.crudbasic.api.domains.users;
 
 import ms.spring.crudbasic.api.domains.profiles.ProfileService;
 import ms.spring.crudbasic.api.domains.users.dtos.CreateUserDto;
+import ms.spring.crudbasic.api.domains.users.dtos.DetailsUserDto;
 import ms.spring.crudbasic.api.domains.users.dtos.PasswordChangeDto;
 import ms.spring.crudbasic.api.domains.users.dtos.UpdateUserDto;
 import ms.spring.crudbasic.api.infrastructure.exceptions.RuleViolationException;
@@ -31,7 +32,15 @@ public class UserService extends CrudService<IUserRepository, UserEntity, Create
         return passwordEncoder.encode(value);
     }
 
-    private void applyRuleValidation(Long profileId) {
+    private void applyRuleValidationOnCreate(Long profileId) {
+
+        if (!profileService.isProfileActive(profileId)) {
+            throw RuleViolationException.emitMessage(ResponseErrors.violationUserProfileId);
+        }
+    }
+
+    private void applyRuleValidationOnUpdate(Long userId, Long profileId) {
+        checkRootUserId(userId);
         if (!profileService.isProfileActive(profileId)) {
             throw RuleViolationException.emitMessage(ResponseErrors.violationUserProfileId);
         }
@@ -44,7 +53,7 @@ public class UserService extends CrudService<IUserRepository, UserEntity, Create
 
     @Override
     public UserEntity create(CreateUserDto dto) {
-        applyRuleValidation(dto.profileId());
+        applyRuleValidationOnCreate(dto.profileId());
         var reference = UserEntity.createNewUser(dto);
         reference.setPassword(encryptPassword(reference.getPassword()));
         save(reference);
@@ -53,7 +62,7 @@ public class UserService extends CrudService<IUserRepository, UserEntity, Create
 
     @Override
     public UserEntity update(Long id, UpdateUserDto dto) {
-        applyRuleValidation(dto.profileId());
+        applyRuleValidationOnUpdate(id, dto.profileId());
         var reference = getReference(id);
         reference.setActive(dto.active());
         reference.setUpdatedAt(new Date());
@@ -72,6 +81,7 @@ public class UserService extends CrudService<IUserRepository, UserEntity, Create
 
     @Transactional
     public void changePassword(Long id, PasswordChangeDto dto) {
+        checkRootUserId(id);
         var reference = getReference(id);
         reference.setPassword(encryptPassword(dto.newPassword()));
         reference.setUpdatedAt(new Date());
@@ -79,8 +89,8 @@ public class UserService extends CrudService<IUserRepository, UserEntity, Create
     }
 
     @Override
-    public Page search(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<DetailsUserDto> search(Pageable pageable) {
+        return repository.findAll(pageable).map(entity -> new DetailsUserDto(entity));
     }
 
     @Override

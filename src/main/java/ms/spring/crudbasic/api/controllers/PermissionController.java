@@ -39,8 +39,8 @@ public class PermissionController implements ICrudBaseController<CreatePermissio
     @Operation(summary = "Update permission", description = "Execute operation of update permission")
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid UpdatePermissionDto request) {
-        var reference = service.update(id, request);
-        return ResponseEntity.ok(new DetailsPermissionDto(reference));
+        service.update(id, request);
+        return ResponseEntity.ok(ResponseSuccess.updatedSuccess());
     }
 
     @Override
@@ -48,8 +48,8 @@ public class PermissionController implements ICrudBaseController<CreatePermissio
     @ApiPageable
     @GetMapping("/search")
     public ResponseEntity<Page<DetailsPermissionDto>> search(@PageableDefault(size = 10) Pageable request) {
-        var responsePage = service.search(request);
-        return ResponseEntity.ok(responsePage);
+        var response = service.search(request);
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class PermissionController implements ICrudBaseController<CreatePermissio
     @Operation(summary = "Remove permission", description = "Execute operation of remove permission")
     @DeleteMapping("/{id}")
     public ResponseEntity remove(@PathVariable Long id) {
-        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removeSuccess()) : ResponseEntity.notFound().build();
+        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removedSuccess()) : ResponseEntity.notFound().build();
     }
 }

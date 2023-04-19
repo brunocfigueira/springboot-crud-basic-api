@@ -9,16 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public interface ICrudBaseController<CreateRecord extends Record, UpdateRecord extends Record, DetailsRecord extends Record> {
+public interface ICrudBaseController<
+        C extends Record, // CreateDto
+        U extends Record, // UpdateDto
+        R extends Record> // ReadDto
+{
     @PostMapping
-    ResponseEntity create(@RequestBody @Valid CreateRecord request, UriComponentsBuilder uriBuilder);
+    ResponseEntity create(@RequestBody @Valid C request, UriComponentsBuilder uriBuilder);
 
     @PutMapping("/{id}")
-    ResponseEntity update(@PathVariable Long id, @RequestBody @Valid UpdateRecord request);
+    ResponseEntity update(@PathVariable Long id, @RequestBody @Valid U request);
 
     @ApiPageable
     @GetMapping("/search")
-    ResponseEntity<Page<DetailsRecord>> search(@PageableDefault(size = 10) Pageable request);
+    ResponseEntity<Page<R>> search(@PageableDefault(size = 10) Pageable request);
 
     @GetMapping("/{id}")
     ResponseEntity show(@PathVariable Long id);

@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public abstract class CrudService<
-        R extends JpaRepository,
-        E,
-        C extends Record,
-        U extends Record
+        R extends JpaRepository, // @Repository
+        E,                       // @Entity
+        C extends Record,        // CreateDto
+        U extends Record         // UpdateDto
         > {
 
     final protected R repository;

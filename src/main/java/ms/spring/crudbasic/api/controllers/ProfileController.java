@@ -45,20 +45,20 @@ public class ProfileController implements ICrudBaseController<CreateProfileDto, 
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid UpdateProfileDto request) {
         service.update(id, request);
-        return ResponseEntity.ok(ResponseSuccess.updateSuccess());
+        return ResponseEntity.ok(ResponseSuccess.updatedSuccess());
     }
 
     @Operation(summary = "Search profile", description = "Execute operation of search profile")
     @ApiPageable
     @GetMapping("/search")
     public ResponseEntity<Page<DetailsProfileDto>> search(@PageableDefault(size = 10) Pageable request) {
-        var responsePage = service.search(request);
-        return ResponseEntity.ok(responsePage);
+        var response = service.search(request);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Remove profile", description = "Execute operation of remove profile")
     @DeleteMapping("/{id}")
     public ResponseEntity remove(@PathVariable Long id) {
-        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removeSuccess()) : ResponseEntity.notFound().build();
+        return service.remove(id) ? ResponseEntity.ok(ResponseSuccess.removedSuccess()) : ResponseEntity.notFound().build();
     }
 }

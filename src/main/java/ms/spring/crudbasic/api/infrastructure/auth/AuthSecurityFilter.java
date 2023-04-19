@@ -36,7 +36,7 @@ public class AuthSecurityFilter extends OncePerRequestFilter {
 
         var user = authService.loadUserByLogin(login);
         if (!user.isEnabled()) {
-            throw ForbiddenAccessException.emitMessage("Invalid user or inactive.");
+            throw ForbiddenAccessException.emitMessage("Invalid credentials.");
         }
         return user;
     }

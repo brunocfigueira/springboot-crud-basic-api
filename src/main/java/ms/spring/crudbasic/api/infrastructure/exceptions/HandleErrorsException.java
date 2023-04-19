@@ -37,7 +37,7 @@ public class HandleErrorsException {
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity error403Forbidden(InternalAuthenticationServiceException ex) {
-        return new ResponseEntity<ResponseForbidden>(ResponseForbidden.emitMessage("Invalid user or inactive."), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ResponseForbidden>(ResponseForbidden.emitMessage("Invalid credentials."), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
