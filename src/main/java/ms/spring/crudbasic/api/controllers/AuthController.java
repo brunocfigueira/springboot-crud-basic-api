@@ -2,7 +2,7 @@ package ms.spring.crudbasic.api.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import ms.spring.crudbasic.api.domains.users.UserEntity;
+import ms.spring.crudbasic.api.domains.entities.UserEntity;
 import ms.spring.crudbasic.api.infrastructure.auth.AuthRequestDto;
 import ms.spring.crudbasic.api.infrastructure.auth.AuthResponseTokenDto;
 import ms.spring.crudbasic.api.infrastructure.auth.AuthTokenService;

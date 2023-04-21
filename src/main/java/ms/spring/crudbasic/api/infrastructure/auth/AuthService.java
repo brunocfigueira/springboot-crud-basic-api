@@ -1,7 +1,7 @@
 package ms.spring.crudbasic.api.infrastructure.auth;
 
-import ms.spring.crudbasic.api.domains.users.DetailsUserToken;
-import ms.spring.crudbasic.api.domains.users.IUserRepository;
+import ms.spring.crudbasic.api.domains.dtos.users.DetailsUserToken;
+import ms.spring.crudbasic.api.domains.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
