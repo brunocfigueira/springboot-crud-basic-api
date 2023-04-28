@@ -71,8 +71,7 @@ public class AuthTokenService {
      * exp (expiration) = Timestamp de quando o token irá expirar;
      * iat (issued at) = Timestamp de quando o token foi criado;
      * aud (audience) = Destinatário do token, representa a aplicação que irá usá-lo.
-     * <p>
-     * pwd (password) = senha hash crypto do usuário
+     *  
      * act (active) = Indicador de status do usuario
      * rol (role) = Indicador do perfil ou papel do usuario
      * pid (permission id) = Indicador dos ids das permissoes do usuario
@@ -90,7 +89,6 @@ public class AuthTokenService {
                     .withIssuer(issueName)
                     .withAudience(audience)
                     .withSubject(user.getLogin())
-                    .withClaim("pwd", user.getPassword())
                     .withClaim("act", user.isEnabled())
                     .withClaim("rol", detailsUserToken.getProfileAcronym())
                     .withClaim("pid", permissionIds)
